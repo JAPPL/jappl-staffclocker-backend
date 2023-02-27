@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "jappl-staffclocker-backend"
+version = "0.1.0"
+description = ""
+authors = ["sudo-lucifer <krittin.niu@student.mahidol.edu>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Django = "^4.1.7"
+djangorestframework = "^3.14.0"
+model-bakery = "^1.10.1"
+pytest-cov = "^4.0.0"
+pytest-django = "^4.5.2"
+psycopg2-binary = "^2.9.5"
+
+[tool.poetry.dev-dependencies]
+pre-commit = "^3.1.0"
+black = "^23.1.0"
+flake8 = "^5.0.1"
+flake8-annotations = "^2.9.1"
+flake8-eradicate = "^1.4.0"
+PyJWT = "^2.6.0"
+
+[tool.black]
+line-length = 120
+target-version = ['py39']
+skip-string-normalization = true
+extend-exclude = '''\/migrations\/'''
+
+[tool.isort]
+profile = "black"
+line_length = 120
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

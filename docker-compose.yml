@@ -1,0 +1,16 @@
+# Database and application deployment
+# Add service below if test on production and run docker compose up -d
+# See https://docs.docker.com/compose/compose-file/compose-file-v3/ for more detail
+version: "3.7"
+services:
+  vending-machine-postgres:
+    image: postgres:latest
+    container_name: jappl-time-log
+    environment:
+      - POSTGRES_PASSWORD=qwertyasdfgh
+      - POSTGRES_DB=jappl_time_log
+      - POSTGRES_USER=jappl_admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./dbvolume:/var/lib/postgresql/data
