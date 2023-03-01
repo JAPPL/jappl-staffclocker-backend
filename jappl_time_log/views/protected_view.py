@@ -13,6 +13,4 @@ class ProtectedView(APIView):
 
     def get(self, request: Request) -> Response:
         """Test API for jwt token (delete this later)."""
-        print(type(format))
-        print(request.user.password)
         return Response(data={"user_id": request.user.user_id})
