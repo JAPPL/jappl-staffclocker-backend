@@ -16,11 +16,9 @@ class JWTTokenAuthentication(JWTAuthentication):
         """Find and return a user using the given validated token."""
         try:
             user_id: int = validated_token[api_settings.USER_ID_CLAIM]
+            user: UserDetail = UserDetail.objects.get(user_id=user_id)
         except KeyError:
             raise InvalidToken(detail="Token contained no recognizable user identification")
-
-        try:
-            user: UserDetail = UserDetail.objects.get(user_id=user_id)
         except UserDetail.DoesNotExist:
             raise InvalidToken(detail="User not found", code="user_not_found")
 
