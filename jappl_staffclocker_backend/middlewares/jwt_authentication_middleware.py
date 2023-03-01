@@ -21,7 +21,7 @@ class JWTTokenAuthentication(JWTAuthentication):
 
         try:
             user: UserDetail = UserDetail.objects.get(user_id=user_id)
-        except self.user_model.DoesNotExist:
+        except UserDetail.DoesNotExist:
             raise InvalidToken(detail="User not found", code="user_not_found")
 
         return user
