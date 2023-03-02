@@ -6,8 +6,9 @@ omit =
   *wsgi/*,
   *wsgi*,
   manage.py,
-  */serializers/*
-  */commands/*
+  */serializers/*,
+  */commands/*,
+  */asgi.py
 relative_files = True
 
 [report]
