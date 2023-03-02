@@ -1,3 +1,4 @@
+from django.core.validators import MaxValueValidator
 from django.db import models
 
 
@@ -6,7 +7,7 @@ class TimeLog(models.Model):
 
     id = models.BigAutoField(primary_key=True)
     user_id = models.ForeignKey(to="jappl_time_log.UserDetail", null=False, on_delete=models.CASCADE)
-    hour_spent = models.PositiveIntegerField(null=False)
+    hour_spent = models.PositiveIntegerField(null=False, validators=[MaxValueValidator(8)])
     message = models.CharField(max_length=100, null=False)
     timestamp = models.DateTimeField(auto_now_add=True)
     project_id = models.ForeignKey(to="jappl_time_log.Project", null=False, on_delete=models.CASCADE)
