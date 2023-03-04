@@ -13,5 +13,10 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.urls import include, path
 
-urlpatterns = []
+from jappl_time_log.urls.user_url import user_url
+
+base_user_url = "user"
+
+urlpatterns = [path(f"{base_user_url}/", include((user_url, "user"), namespace="user"))]
