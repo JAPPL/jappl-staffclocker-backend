@@ -18,7 +18,7 @@ class LoginView(GenericAPIView):
     serializer_class = LoginInputSerializer
 
     def post(self, request: Request, *args: Tuple[str, str], **kwargs: Dict[str, int]) -> Response:
-        """Process request data and validate user account .
+        """Process request data and validate user account.
 
         :param request: Request from user with format (see swagger for more information)
         :param args: additional arguments

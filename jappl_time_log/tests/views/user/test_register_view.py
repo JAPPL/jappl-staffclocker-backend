@@ -12,7 +12,7 @@ from jappl_time_log.tests.model_instances.user_detail_instance import user_insta
 
 
 class TestLoginView(APITestCase):
-    """Test class for user login."""
+    """Test class for user registration."""
 
     @classmethod
     def setUpTestData(cls) -> None:
@@ -21,35 +21,43 @@ class TestLoginView(APITestCase):
         hashed_password = UserAccountService.hash_password(raw_password)
         cls.user: UserDetail = user_instance.make(email="test@gmail.com", password=hashed_password)
         cls.raw_password: str = raw_password
-        cls.url = reverse("user:login")
+        cls.url = reverse("user:register")
 
-    def test_login_correct_email_and_password(self) -> None:
-        """Method to test user login successfully."""
-        request_body: Dict[str, str] = {"email": self.user.email, "password": self.raw_password}
+    def test_register_successfully(self) -> None:
+        """Method to test user register successfully."""
+        request_body: Dict[str, str] = {
+            "email": "test2@gmail.com",
+            "password": self.raw_password,
+            "first_name": self.user.first_name,
+            "last_name": self.user.last_name,
+        }
         response: Response = self.client.post(self.url, data=request_body)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["first_name"], self.user.first_name)
-        self.assertEqual(response.data["last_name"], self.user.last_name)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_login_incorrect_email_and_password(self) -> None:
-        """Method to test user login with invalid email or password."""
-        request_body: Dict[str, str] = {"email": self.user.email, "password": secrets.token_hex(16)}
+    def test_register_duplicate_email(self) -> None:
+        """Method to test user register with duplicate email."""
+        request_body: Dict[str, str] = {
+            "email": self.user.email,
+            "password": self.raw_password,
+            "first_name": self.user.first_name,
+            "last_name": self.user.last_name,
+        }
         response: Response = self.client.post(self.url, data=request_body)
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        request_body: Dict[str, str] = {"email": "test2@gmail.com", "password": secrets.token_hex(16)}
-        response: Response = self.client.post(self.url, data=request_body)
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-    def test_login_invalid_input(self) -> None:
-        """Method to test user login with invalid request data."""
+    def test_register_invalid_input(self) -> None:
+        """Method to test user register with invalid request data."""
         response: Response = self.client.post(self.url)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        request_body: Dict[str, str] = {"email": self.user.email}
+        request_body: Dict[str, str] = {"email": self.user.email, "password": secrets.token_hex(16)}
         response: Response = self.client.post(self.url, data=request_body)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         request_body: Dict[str, str] = {"password": secrets.token_hex(16)}
+        response: Response = self.client.post(self.url, data=request_body)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        request_body: Dict[str, str] = {"email": self.user.email}
         response: Response = self.client.post(self.url, data=request_body)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
