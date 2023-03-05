@@ -2,7 +2,7 @@
 omit =
   *migrations/*,
   *settings*,
-  *tests/*,
+  */tests/*,
   *wsgi/*,
   *wsgi*,
   manage.py,
