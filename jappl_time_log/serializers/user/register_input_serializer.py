@@ -6,7 +6,7 @@ from jappl_time_log.models.user_detail_model import UserDetail
 class RegisterInputSerializer(ModelSerializer):
     """Serializer for user registration request data."""
 
-    email = EmailField()
+    email = EmailField(help_text="User's email with format")
 
     class Meta:
         """Meta data for serializer class.

@@ -1,5 +1,6 @@
 from typing import Dict, Tuple
 
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.request import Request
@@ -17,14 +18,9 @@ class LoginView(GenericAPIView):
 
     serializer_class = LoginInputSerializer
 
+    @extend_schema(responses={200: LoginOutputSerializer})
     def post(self, request: Request, *args: Tuple[str, str], **kwargs: Dict[str, int]) -> Response:
-        """Process request data and validate user account.
-
-        :param request: Request from user with format (see swagger for more information)
-        :param args: additional arguments
-        :param: kwargs: required variable in url
-        :return: response with signed token for user identity
-        """
+        """Process request data and validate user account."""
         input_serializer: LoginInputSerializer = self.serializer_class(data=request.data)
         input_serializer.is_valid(raise_exception=True)
         validated_data: LoginInputDataclass = input_serializer.validated_data
