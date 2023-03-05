@@ -20,4 +20,4 @@ from rest_framework import routers
 context_path = "api/"
 router = routers.DefaultRouter(trailing_slash=False)
 
-urlpatterns = [path("admin/", admin.site.urls), path(f"{context_path}time_log/", include('jappl_time_log.urls'))]
+urlpatterns = [path("admin/", admin.site.urls), path(f"{context_path}", include('jappl_time_log.urls'))]
