@@ -2,7 +2,7 @@ from django.test import TestCase
 from rest_framework_simplejwt.exceptions import InvalidToken
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
-from jappl_staffclocker_backend.middlewares.jwt_authentication_middleware import JWTTokenAuthentication
+from jappl_staffclocker_backend.middlewares.jwt_authentication_middleware import JWTTokenAuthentication, JWTTokenSchema
 from jappl_time_log.models.user_detail_model import UserDetail
 from jappl_time_log.tests.model_instances.user_detail_instance import user_instance
 
@@ -36,3 +36,15 @@ class TestJWTTokenAuthenticationMiddleware(TestCase):
             user_token_with_no_credential: AccessToken = self.user_token
             user_token_with_no_credential.payload.pop("user_id")
             self.middleware.get_user(validated_token=user_token_with_no_credential)
+
+    def test_jwt_token_schema(self) -> None:
+        """Method to test if schema render properly."""
+        jwt_token_schema: JWTTokenSchema = JWTTokenSchema(
+            target="jappl_staffclocker_backend.middlewares.jwt_authentication_middleware.JWTTokenAuthentication"
+        )
+        expected_result = {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "Bearer",
+        }
+        self.assertEqual(jwt_token_schema.get_security_definition(_auto_schema="test"), expected_result)

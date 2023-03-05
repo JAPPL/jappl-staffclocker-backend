@@ -11,7 +11,7 @@ from jappl_time_log.services.user.user_account_service import UserAccountService
 
 
 class RegisterView(CreateAPIView):
-    """API for user to register."""
+    """API for user to register account."""
 
     serializer_class = RegisterInputSerializer
 

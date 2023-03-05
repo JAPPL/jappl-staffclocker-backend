@@ -15,9 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework import routers
 
 context_path = "api/"
 router = routers.DefaultRouter(trailing_slash=False)
 
-urlpatterns = [path("admin/", admin.site.urls), path(f"{context_path}", include('jappl_time_log.urls'))]
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger'),
+    path(f"{context_path}", include('jappl_time_log.urls')),
+]

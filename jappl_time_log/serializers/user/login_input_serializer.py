@@ -1,4 +1,4 @@
-from rest_framework.serializers import EmailField
+from rest_framework.serializers import CharField, EmailField
 from rest_framework_dataclasses.serializers import DataclassSerializer
 
 from jappl_time_log.dataclasses.user.login_input_dataclass import LoginInputDataclass
@@ -7,7 +7,8 @@ from jappl_time_log.dataclasses.user.login_input_dataclass import LoginInputData
 class LoginInputSerializer(DataclassSerializer):
     """Serializer for user login request data."""
 
-    email = EmailField()
+    email = EmailField(help_text="User's email with format")
+    password = CharField(help_text="User's password")
 
     class Meta:
         """Meta data for serializer class.
