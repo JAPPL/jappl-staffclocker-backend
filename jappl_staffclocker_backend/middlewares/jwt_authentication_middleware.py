@@ -1,7 +1,6 @@
 from typing import Dict
 
 from drf_spectacular.extensions import OpenApiAuthenticationExtension
-from drf_spectacular.openapi import AutoSchema
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import InvalidToken
 from rest_framework_simplejwt.settings import api_settings
@@ -16,7 +15,7 @@ class JWTTokenSchema(OpenApiAuthenticationExtension):
     target_class = "jappl_staffclocker_backend.middlewares.jwt_authentication_middleware.JWTTokenAuthentication"
     name = "BearerAuthentication"
 
-    def get_security_definition(self, _auto_schema: AutoSchema) -> Dict[str, str]:
+    def get_security_definition(self, _auto_schema) -> Dict[str, str]:
         """Get security definition for swagger."""
         return {
             "type": "http",
