@@ -12,7 +12,7 @@ class TestUserAccountService(TestCase):
     @classmethod
     def setUpTestData(cls):
         """Mock user data for test case."""
-        cls.user: UserDetail = user_instance.make(email="test@gmail.com", password="test")
+        cls.user: UserDetail = user_instance.make(email="test@gmail.com")
 
     def test_generate_token_invalid_hash_password(self):
         """Method to test password is in incorrect hash format."""
