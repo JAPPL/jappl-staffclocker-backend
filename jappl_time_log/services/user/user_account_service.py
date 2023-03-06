@@ -1,7 +1,7 @@
 from typing import Tuple, Union
 
 import argon2
-from argon2.exceptions import VerifyMismatchError
+from argon2.exceptions import InvalidHash, VerifyMismatchError
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from jappl_time_log.dataclasses.user.login_input_dataclass import LoginInputDataclass
@@ -26,6 +26,8 @@ class UserAccountService:
                 argon2_hasher.verify(hashed_password, user_data.password)
                 jwt_token: RefreshToken = RefreshToken.for_user(user=user_detail)
                 return jwt_token.access_token, user_detail
+            except InvalidHash:
+                print(f"User {user_detail.user_id} has invalid hashed password in database.")
             except VerifyMismatchError:
                 pass
         return "", None
