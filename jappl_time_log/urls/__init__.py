@@ -19,7 +19,6 @@ from jappl_time_log.urls.application_url import application_url
 from jappl_time_log.urls.project_url import project_url
 from jappl_time_log.urls.user_url import user_url
 
-
 base_user_url = "user"
 base_application_url = "application"
 base_project_url = "project"
