@@ -1,12 +1,12 @@
 from typing import Any
 
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import BasePermission
 from rest_framework.request import Request
 
 # from jappl_time_log.models.application_permission_model import ApplicationPermission
 
 
-class AdminOnly(IsAdminUser):
+class AdminOnly(BasePermission):
     """Permission to check if user is admin."""
 
     def has_permission(self, request: Request, view: Any) -> bool:
@@ -17,6 +17,6 @@ class AdminOnly(IsAdminUser):
         # permissions = ApplicationPermission.objects.filter(user_id=user_id, application_id=1).values()
         # if permissions < 1:
 
-        admin_permission = bool(request.user)
-        print(admin_permission)
-        return admin_permission
+        # admin_permission = bool(request.user)
+        # print(admin_permission)
+        return bool(request.user)
