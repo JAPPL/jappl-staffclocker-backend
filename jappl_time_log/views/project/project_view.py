@@ -1,7 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
 
 from jappl_time_log.models.project_model import Project
-from jappl_time_log.permissions.is_admin import AdminOnly
+from jappl_time_log.permissions.is_admin_permission import IsAdminPermission
 from jappl_time_log.serializers.project.project_serializer import ProjectSerializer
 
 
@@ -10,4 +10,4 @@ class ProjectView(ModelViewSet):
 
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = [AdminOnly]
+    permission_classes = [IsAdminPermission]
