@@ -173,6 +173,17 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "django-filter"
+version = "22.1"
+description = "Django-filter is a reusable Django application for allowing users to filter querysets dynamically."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+Django = ">=3.2"
+
+[[package]]
 name = "djangorestframework"
 version = "3.14.0"
 description = "Web APIs for Django, made easy."
@@ -667,7 +678,7 @@ test = ["covdefaults (>=2.2.2)", "coverage-enable-subprocess (>=1)", "coverage (
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "c3f67477b45bf5f651696dca8b3ed56b55d307aa8de865c066fc13aa37401ec3"
+content-hash = "8ceec53d401e3e8b3c1f1a8643dc9a6cb5d493491b7a5213a02b3044b69f8598"
 
 [metadata.files]
 argon2-cffi = []
@@ -689,6 +700,7 @@ dataclasses-json = [
 ]
 distlib = []
 django = []
+django-filter = []
 djangorestframework = []
 djangorestframework-camel-case = []
 djangorestframework-dataclasses = []

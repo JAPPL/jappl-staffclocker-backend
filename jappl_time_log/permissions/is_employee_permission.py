@@ -5,7 +5,7 @@ from rest_framework.permissions import BasePermission
 from rest_framework.request import Request
 
 
-class EmployeeOnlyPermission(BasePermission):
+class IsEmployeePermission(BasePermission):
     """Permission class to verify user is employee or anonymous user."""
 
     def has_permission(self, request: Request, view: Any) -> bool:
