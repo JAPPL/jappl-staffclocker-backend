@@ -17,14 +17,17 @@ from django.urls import include, path
 
 from jappl_time_log.urls.application_url import application_url
 from jappl_time_log.urls.project_url import project_url
+from jappl_time_log.urls.timelog_url import timelog_url
 from jappl_time_log.urls.user_url import user_url
 
 base_user_url = "user"
 base_application_url = "application"
 base_project_url = "project"
+base_timelog_url = "timelog"
 
 urlpatterns = [
     path(f"{base_user_url}/", include((user_url, "user"), namespace="user")),
     path(f"{base_project_url}/", include((project_url, "project"), namespace="project")),
     path(f"{base_application_url}/", include((application_url, "application"), namespace="application")),
+    path(f"{base_timelog_url}/", include((timelog_url, "timelog"), namespace="timelog")),
 ]
