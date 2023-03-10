@@ -73,13 +73,17 @@ class TimeLogView(ModelViewSet):
             timelog_user: UserDetail = query.user_id
 
             if timelog_user.user_id != this_user.user_id:
-                return Response(data={"Can't edit other user."}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(data={"Can't edit other user."}, status=status.HTTP_401_UNAUTHORIZED)
         except ObjectDoesNotExist as e:
             return Response(data={"detail": f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
 
+        user: UserDetail = request.user
+        data_with_user_id: QueryDict = QueryDict(f"user_id={user.user_id}", mutable=True)
+        data_with_user_id.update(request.data.copy())
+
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer = self.get_serializer(instance, data=data_with_user_id, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
 
