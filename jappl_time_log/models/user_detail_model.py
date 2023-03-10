@@ -1,5 +1,7 @@
 from django.db import models
 
+from jappl_time_log.models.role_enum.user_role import UserRole
+
 
 class UserDetail(models.Model):
     """UserDetail model to keep user data in the database."""
@@ -9,4 +11,6 @@ class UserDetail(models.Model):
     last_name = models.CharField(max_length=100, null=False, blank=False, help_text="User's last name")
     email = models.CharField(max_length=100, null=False, blank=False, unique=True, help_text="User's email")
     password = models.CharField(max_length=100, null=False, blank=False, help_text="User's hashed password")
-    is_super_admin = models.BooleanField(default=False, null=False, blank=False, help_text="Is user super admin?")
+    user_role = models.CharField(
+        max_length=100, null=False, blank=False, choices=UserRole.choices, help_text="User's role"
+    )
