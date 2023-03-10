@@ -172,3 +172,4 @@ dbvolume/
 .DS_Store
 .pytest_cache
 cov_html
+project-flow.png
