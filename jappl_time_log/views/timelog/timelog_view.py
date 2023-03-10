@@ -1,7 +1,7 @@
 from typing import Dict, Tuple
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import IntegrityError, transaction
+from django.db import transaction
 from django.http import QueryDict
 from rest_framework import status
 from rest_framework.request import Request
@@ -10,7 +10,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from jappl_time_log.models.time_log_model import TimeLog
 from jappl_time_log.models.user_detail_model import UserDetail
-from jappl_time_log.permissions.employee_only_permission import EmployeeOnlyPermission
+from jappl_time_log.permissions.is_employee_permission import IsEmployeePermission
 from jappl_time_log.serializers.timelog.timelog_input_serializer import TimeLogSerializer
 
 
@@ -19,7 +19,7 @@ class TimeLogView(ModelViewSet):
 
     queryset = TimeLog.objects.all()
     serializer_class = TimeLogSerializer
-    permission_classes = [EmployeeOnlyPermission]
+    permission_classes = [IsEmployeePermission]
 
     @transaction.atomic
     def list(self, request: Request) -> Response:
@@ -44,10 +44,7 @@ class TimeLogView(ModelViewSet):
         input_serializer: TimeLogSerializer = self.serializer_class(data=data_with_user_id)
         input_serializer.is_valid(raise_exception=True)
 
-        try:
-            input_serializer.save()
-        except IntegrityError as e:
-            return Response(data={"detail": f"Something went wrong: {e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        input_serializer.save()
         return Response(data=input_serializer.data, status=status.HTTP_201_CREATED)
 
     @transaction.atomic
@@ -59,7 +56,7 @@ class TimeLogView(ModelViewSet):
             timelog_user: UserDetail = query.user_id
 
             if timelog_user.user_id != this_user.user_id:
-                return Response(data={"Can't edit other user."}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(data={"Can't edit other user."}, status=status.HTTP_401_UNAUTHORIZED)
         except ObjectDoesNotExist as e:
             return Response(data={"detail": f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
 
