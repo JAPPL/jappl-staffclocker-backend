@@ -1,0 +1,57 @@
+sequenceDiagram
+    autonumber
+    actor User
+    participant F as Frontend
+    participant FA as Firebase Authentication
+    participant BA as Backend API
+    participant DB as Database
+    User->>F: login with valid email
+    activate F
+    activate User
+    F->>+FA: request for verification
+    FA-->>-F: JWT token
+    F->>BA: send request to /api/timelog/all with token from firebase
+    activate BA
+    alt when user login for the first time
+        BA->>DB: insert new user
+        activate DB
+    end
+    BA->>DB: query user information from user detail table
+    DB-->>BA: user information
+    BA->>DB: query time log
+    DB-->>BA: list of time log
+    deactivate DB
+    BA-->>F: response with all time logs
+    deactivate BA
+    F-->>User: see dashboard
+    User->>F: navigate to project page
+    F->>BA: send request to api/project/list with token from firebase
+    activate BA
+    BA->>DB: query user information from user detail table
+    activate DB
+    DB-->>BA: user information
+    BA->>DB: query projects
+    DB-->>BA: list of projects
+    deactivate DB
+    BA-->>F: response with list of projects
+    deactivate BA
+    F-->>User: see all projects
+
+    User->>F: add project
+    F->>BA: send request to api/project/add with token from firebase
+    activate BA
+    BA->>DB: query user information from user detail table
+    activate DB
+    DB-->>BA: user information
+    alt when request is in invalid format
+        BA-->>F: 400 bad request
+        F-->>User: notification with error message
+    end
+    BA->>DB: insert new project
+    DB-->>BA: project query instance
+    deactivate DB
+    BA-->>F: response with added project information
+    deactivate BA
+    F-->>User: see added project
+    deactivate User
+    deactivate F
