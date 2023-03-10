@@ -114,7 +114,7 @@ class TestTimeLogView(APITestCase):
 
     def test_put_timelog_not_self(self) -> None:
         """Method to test put timelog that is not self."""
-        url: str = reverse(self.route["create"], args=[self.timelog_2.id])
+        url: str = reverse(self.route["update"], args=[self.timelog_2.id])
         data: Dict[str, str] = {"hour_spent": 4, "message": "test2_message", "project_id": self.project.project_id}
         response: Response = self.client.put(url, data=data, HTTP_AUTHORIZATION=self.token)
 
@@ -122,14 +122,14 @@ class TestTimeLogView(APITestCase):
 
     def test_put_timelog_no_input(self) -> None:
         """Method to test put timelog that has no input."""
-        url: str = reverse(self.route["create"], args=[self.timelog.id])
+        url: str = reverse(self.route["update"], args=[self.timelog.id])
         response: Response = self.client.put(url, HTTP_AUTHORIZATION=self.token)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_put_timelog_not_exist(self) -> None:
         """Method to test put timelog that doesn't exist."""
-        url: str = reverse(self.route["create"], args=[self.timelog.id + 2])
+        url: str = reverse(self.route["update"], args=[self.timelog.id + 2])
         data: Dict[str, str] = {"hour_spent": 4, "message": "test2_message", "project_id": self.project.project_id}
         response: Response = self.client.put(url, data=data, HTTP_AUTHORIZATION=self.token)
 
@@ -137,7 +137,7 @@ class TestTimeLogView(APITestCase):
 
     def test_patch_timelog(self) -> None:
         """Method to test patch timelog."""
-        url: str = reverse(self.route["create"], args=[self.timelog.id])
+        url: str = reverse(self.route["update"], args=[self.timelog.id])
         data: Dict[str, str] = {"message": "test3_message"}
         response: Response = self.client.patch(url, data=data, HTTP_AUTHORIZATION=self.token)
 
@@ -146,7 +146,7 @@ class TestTimeLogView(APITestCase):
 
     def test_patch_timelog_not_self(self) -> None:
         """Method to test patch timelog that is not self."""
-        url: str = reverse(self.route["create"], args=[self.timelog_2.id])
+        url: str = reverse(self.route["update"], args=[self.timelog_2.id])
         data: Dict[str, str] = {"hour_spent": 4, "message": "test2_message", "project_id": self.project.project_id}
         response: Response = self.client.patch(url, data=data, HTTP_AUTHORIZATION=self.token)
 
@@ -154,14 +154,14 @@ class TestTimeLogView(APITestCase):
 
     def test_patch_timelog_no_input(self) -> None:
         """Method to test patch timelog that has no input."""
-        url: str = reverse(self.route["create"], args=[self.timelog.id])
+        url: str = reverse(self.route["update"], args=[self.timelog.id])
         response: Response = self.client.patch(url, HTTP_AUTHORIZATION=self.token)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_patch_timelog_not_exist(self) -> None:
         """Method to test patch timelog that doesn't exist."""
-        url: str = reverse(self.route["create"], args=[self.timelog.id + 2])
+        url: str = reverse(self.route["update"], args=[self.timelog.id + 2])
         data: Dict[str, str] = {"message": "test2_message"}
         response: Response = self.client.patch(url, data=data, HTTP_AUTHORIZATION=self.token)
 
