@@ -13,4 +13,4 @@ class TimeLogSerializer(ModelSerializer):
         """
 
         model = TimeLog
-        fields = ['id', 'user_id', 'hour_spent', 'message', 'project_id', 'approved', 'paid']
+        fields = "__all__"
