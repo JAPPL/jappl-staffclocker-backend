@@ -13,4 +13,4 @@ class UserDetailSerializer(ModelSerializer):
         """
 
         model = UserDetail
-        fields = ["user_id", "first_name", "last_name", "email"]
+        fields = ["user_id", "first_name", "last_name", "email", "is_super_admin"]
