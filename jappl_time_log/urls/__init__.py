@@ -31,6 +31,6 @@ urlpatterns = [
     path(f"{base_user_url}/", include((user_url, "user"), namespace="user")),
     path(f"{base_project_url}/", include((project_url, "project"), namespace="project")),
     path(f"{base_application_url}/", include((application_url, "application"), namespace="application")),
-    path(f"{base_timelog_url}/", include((timelog_url, "timelog"), namespace="timelog")),
     path(f"{base_project_member_url}/", include((project_member_url, "project_member"), namespace="project_member")),
+    path(f"{base_timelog_url}/", include((timelog_url, "timelog"), namespace="timelog")),
 ]
