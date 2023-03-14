@@ -139,7 +139,7 @@ class TestApplicationPermissionView(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_delete_application_permission_not_found(self):
-        """Method to test adding non-existing application permission."""
+        """Method to test deleting non-existing application permission."""
         url = reverse(
             "application:permission-delete",
             kwargs={"application_permission_id": self.application_permission.application_permission_id + 1},
