@@ -173,3 +173,4 @@ dbvolume/
 .pytest_cache
 cov_html
 project-flow.png
+timelog-flow.png
