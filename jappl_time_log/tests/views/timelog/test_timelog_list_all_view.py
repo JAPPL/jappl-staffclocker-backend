@@ -24,9 +24,7 @@ class TestTimeLogListAllView(APITestCase):
         """Mock data for timelog list test cases."""
         raw_password: str = secrets.token_hex(16)
         hashed_password: str = UserAccountService.hash_password(raw_password)
-        super_admin: UserDetail = user_instance.make(
-            email="test@gmail.com", password=hashed_password, is_super_admin=True
-        )
+        super_admin: UserDetail = user_instance.make(email="test@gmail.com", password=hashed_password)
         user: UserDetail = user_instance.make()
         cls.admin_token: str = "Bearer " + str(RefreshToken.for_user(user=super_admin).access_token)
         cls.employee_token: str = "Bearer " + str(RefreshToken.for_user(user=user).access_token)

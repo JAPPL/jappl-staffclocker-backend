@@ -17,7 +17,7 @@ class TestRegisterView(APITestCase):
     @classmethod
     def setUpTestData(cls) -> None:
         """Mock data for test cases."""
-        user: UserDetail = user_instance.make(is_super_admin=True)
+        user: UserDetail = user_instance.make()
         cls.token: str = "Bearer " + str(RefreshToken.for_user(user=user).access_token)
         project_names: List[str] = ["Test_Project_1", "Test_Project_2", "Test_Project_3"]
         for name in project_names:
