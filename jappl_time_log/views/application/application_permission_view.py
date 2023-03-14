@@ -5,7 +5,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.viewsets import ModelViewSet
 
 from jappl_time_log.models.application_permission_model import ApplicationPermission
-from jappl_time_log.permissions.is_admin_permission import IsAdminPermission
+from jappl_time_log.permissions.is_employee_permission import IsEmployeePermission
 from jappl_time_log.serializers.application.application_permission_read_serializer import (
     ApplicationPermissionReadSerializer,
 )
@@ -24,7 +24,7 @@ class ApplicationPermissionViewSet(ModelViewSet):
         "update": ApplicationPermissionWriteSerializer,
         "list": ApplicationPermissionReadSerializer,
     }
-    permission_classes = [IsAdminPermission]
+    permission_classes = [IsEmployeePermission]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['application', 'user']
     search_fields = ['application__application_name', 'user__first_name', 'user__last_name', 'user__email']
