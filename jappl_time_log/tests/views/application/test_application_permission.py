@@ -32,14 +32,9 @@ class TestApplicationPermissionView(APITestCase):
         raw_password: str = secrets.token_hex(16)
         hashed_password: str = UserAccountService.hash_password(raw_password)
         application: Application = application_instance.make()
-        super_admin: UserDetail = user_instance.make(
-            email="test@gmail.com", password=hashed_password, is_super_admin=True
-        )
         user: UserDetail = user_instance.make(email="test2@gmail.com", password=hashed_password)
-        cls.super_admin: UserDetail = super_admin
         cls.user_1: UserDetail = user
         cls.user_2: UserDetail = user_instance.make()
-        cls.super_admin_token: str = "Bearer " + str(RefreshToken.for_user(user=super_admin).access_token)
         cls.employee_token: str = "Bearer " + str(RefreshToken.for_user(user=user).access_token)
         cls.application_1: Application = application
         cls.application_2: Application = application_instance.make()
@@ -54,13 +49,10 @@ class TestApplicationPermissionView(APITestCase):
         response: Response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-        response: Response = self.client.get(url, HTTP_AUTHORIZATION=self.employee_token)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
     def test_list_multiple_application_permission(self):
         """Method to test listing application permission."""
         url: str = reverse("application:permission-list")
-        response: Response = self.client.get(url, HTTP_AUTHORIZATION=self.super_admin_token)
+        response: Response = self.client.get(url, HTTP_AUTHORIZATION=self.employee_token)
         expected_result: List[ApplicationPermission] = [
             ApplicationPermissionReadSerializer(self.application_permission).data
         ]
@@ -73,7 +65,7 @@ class TestApplicationPermissionView(APITestCase):
             "application:permission-detail",
             kwargs={"application_permission_id": self.application_permission.application_permission_id},
         )
-        response: Response = self.client.get(url, HTTP_AUTHORIZATION=self.super_admin_token)
+        response: Response = self.client.get(url, HTTP_AUTHORIZATION=self.employee_token)
         expected_result: Application = ApplicationPermissionReadSerializer(self.application_permission).data
         response_data: Application = json.loads(json.dumps(response.data))
         self.assertEqual(expected_result, response_data)
@@ -84,20 +76,20 @@ class TestApplicationPermissionView(APITestCase):
             "application:permission-detail",
             kwargs={"application_permission_id": self.application_permission.application_permission_id + 1},
         )
-        response: Response = self.client.get(url, HTTP_AUTHORIZATION=self.super_admin_token)
+        response: Response = self.client.get(url, HTTP_AUTHORIZATION=self.employee_token)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_add_application_permission_valid_input(self):
         """Method to test adding application with correct input."""
         url: str = reverse("application:permission-add")
         request_body: Dict[str, str] = {"application": self.application_1.application_id, "user": self.user_2.user_id}
-        response: Response = self.client.post(url, data=request_body, HTTP_AUTHORIZATION=self.super_admin_token)
+        response: Response = self.client.post(url, data=request_body, HTTP_AUTHORIZATION=self.employee_token)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_add_application_permission_invalid_input(self):
         """Method to test adding application permission with incorrect input."""
         url: str = reverse("application:permission-add")
-        response: Response = self.client.post(url, HTTP_AUTHORIZATION=self.super_admin_token)
+        response: Response = self.client.post(url, HTTP_AUTHORIZATION=self.employee_token)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_edit_application_permission_valid_input(self):
@@ -106,7 +98,7 @@ class TestApplicationPermissionView(APITestCase):
             self.update_url, kwargs={"application_permission_id": self.application_permission.application_permission_id}
         )
         request_body: Dict[str, str] = {"application": self.application_2.application_id, "user": self.user_1.user_id}
-        response: Response = self.client.put(url, data=request_body, HTTP_AUTHORIZATION=self.super_admin_token)
+        response: Response = self.client.put(url, data=request_body, HTTP_AUTHORIZATION=self.employee_token)
         self.application_permission.application = self.application_2
         expected_result: Application = ApplicationPermissionWriteSerializer(self.application_permission).data
         response_data: Application = json.loads(json.dumps(response.data))
@@ -117,7 +109,7 @@ class TestApplicationPermissionView(APITestCase):
         url: str = reverse(
             self.update_url, kwargs={"application_permission_id": self.application_permission.application_permission_id}
         )
-        response: Response = self.client.put(url, HTTP_AUTHORIZATION=self.super_admin_token)
+        response: Response = self.client.put(url, HTTP_AUTHORIZATION=self.employee_token)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_edit_application_permission_not_found(self):
@@ -126,7 +118,7 @@ class TestApplicationPermissionView(APITestCase):
             self.update_url,
             kwargs={"application_permission_id": self.application_permission.application_permission_id + 1},
         )
-        response: Response = self.client.put(url, HTTP_AUTHORIZATION=self.super_admin_token)
+        response: Response = self.client.put(url, HTTP_AUTHORIZATION=self.employee_token)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_application_permission(self):
@@ -135,14 +127,14 @@ class TestApplicationPermissionView(APITestCase):
             "application:permission-delete",
             kwargs={"application_permission_id": self.application_permission.application_permission_id},
         )
-        response: Response = self.client.delete(url, HTTP_AUTHORIZATION=self.super_admin_token)
+        response: Response = self.client.delete(url, HTTP_AUTHORIZATION=self.employee_token)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_delete_application_permission_not_found(self):
-        """Method to test adding non-existing application permission."""
+        """Method to test deleting non-existing application permission."""
         url = reverse(
             "application:permission-delete",
             kwargs={"application_permission_id": self.application_permission.application_permission_id + 1},
         )
-        response: Response = self.client.delete(url, HTTP_AUTHORIZATION=self.super_admin_token)
+        response: Response = self.client.delete(url, HTTP_AUTHORIZATION=self.employee_token)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

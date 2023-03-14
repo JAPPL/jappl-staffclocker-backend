@@ -9,4 +9,3 @@ class UserDetail(models.Model):
     last_name = models.CharField(max_length=100, null=False, blank=False, help_text="User's last name")
     email = models.CharField(max_length=100, null=False, blank=False, unique=True, help_text="User's email")
     password = models.CharField(max_length=100, null=False, blank=False, help_text="User's hashed password")
-    is_super_admin = models.BooleanField(default=False, null=False, blank=False, help_text="Is user super admin?")
