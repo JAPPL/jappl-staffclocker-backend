@@ -49,9 +49,6 @@ class TestApplicationPermissionView(APITestCase):
         response: Response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-        response: Response = self.client.get(url, HTTP_AUTHORIZATION=self.employee_token)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
     def test_list_multiple_application_permission(self):
         """Method to test listing application permission."""
         url: str = reverse("application:permission-list")

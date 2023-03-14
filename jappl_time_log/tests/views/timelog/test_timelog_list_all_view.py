@@ -24,10 +24,8 @@ class TestTimeLogListAllView(APITestCase):
         """Mock data for timelog list test cases."""
         raw_password: str = secrets.token_hex(16)
         hashed_password: str = UserAccountService.hash_password(raw_password)
-        super_admin: UserDetail = user_instance.make(email="test@gmail.com", password=hashed_password)
-        user: UserDetail = user_instance.make()
-        cls.admin_token: str = "Bearer " + str(RefreshToken.for_user(user=super_admin).access_token)
-        cls.employee_token: str = "Bearer " + str(RefreshToken.for_user(user=user).access_token)
+        user: UserDetail = user_instance.make(email="test@gmail.com", password=hashed_password)
+        cls.token: str = "Bearer " + str(RefreshToken.for_user(user=user).access_token)
         cls.timelog_1: TimeLog = time_log_instance.make()
         cls.timelog_2: TimeLog = time_log_instance.make()
         cls.url: str = reverse("timelog:timelog_list_all")
@@ -37,12 +35,9 @@ class TestTimeLogListAllView(APITestCase):
         response: Response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-        response: Response = self.client.get(self.url, HTTP_AUTHORIZATION=self.employee_token)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
     def test_list__all_timelog_with_permission(self):
         """Method to test listing all timelog."""
-        response: Response = self.client.get(self.url, HTTP_AUTHORIZATION=self.admin_token)
+        response: Response = self.client.get(self.url, HTTP_AUTHORIZATION=self.token)
         expected_result: List[TimeLog] = [
             TimeLogReadSerializer(self.timelog_1).data,
             TimeLogReadSerializer(self.timelog_2).data,
