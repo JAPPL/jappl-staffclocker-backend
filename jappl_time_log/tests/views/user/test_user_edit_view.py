@@ -10,7 +10,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from jappl_time_log.models.user_detail_model import UserDetail
 from jappl_time_log.serializers.user.user_edit_serializer import UserEditSerializer
-from jappl_time_log.services.user.user_account_service import UserAccountService
 from jappl_time_log.tests.model_instances.user_detail_instance import user_instance
 
 
@@ -20,9 +19,7 @@ class TestUserEditView(APITestCase):
     @classmethod
     def setUpTestData(cls):
         """Mock data for edit user test cases."""
-        raw_password: str = secrets.token_hex(16)
-        hashed_password: str = UserAccountService.hash_password(raw_password)
-        user: UserDetail = user_instance.make(email="test.edit@gmail.com", password=hashed_password)
+        user: UserDetail = user_instance.make(email="test.edit@gmail.com")
         cls.token: str = "Bearer " + str(RefreshToken.for_user(user=user).access_token)
         cls.first_name: str = secrets.token_hex(16)
         cls.last_name: str = secrets.token_hex(16)

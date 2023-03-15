@@ -1,5 +1,4 @@
 import json
-import secrets
 from typing import Dict, List
 
 from django.urls import reverse
@@ -17,7 +16,6 @@ from jappl_time_log.serializers.application.application_permission_read_serializ
 from jappl_time_log.serializers.application.application_permission_write_serializer import (
     ApplicationPermissionWriteSerializer,
 )
-from jappl_time_log.services.user.user_account_service import UserAccountService
 from jappl_time_log.tests.model_instances.application_model import application_instance
 from jappl_time_log.tests.model_instances.application_permission_instance import application_permission_instance
 from jappl_time_log.tests.model_instances.user_detail_instance import user_instance
@@ -29,10 +27,8 @@ class TestApplicationPermissionView(APITestCase):
     @classmethod
     def setUpTestData(cls):
         """Mock data for application permission test cases."""
-        raw_password: str = secrets.token_hex(16)
-        hashed_password: str = UserAccountService.hash_password(raw_password)
         application: Application = application_instance.make()
-        user: UserDetail = user_instance.make(email="test2@gmail.com", password=hashed_password)
+        user: UserDetail = user_instance.make(email="test2@gmail.com")
         cls.user_1: UserDetail = user
         cls.user_2: UserDetail = user_instance.make()
         cls.employee_token: str = "Bearer " + str(RefreshToken.for_user(user=user).access_token)

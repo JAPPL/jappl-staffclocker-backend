@@ -1,5 +1,4 @@
 import json
-import secrets
 from typing import List
 
 from django.urls import reverse
@@ -11,7 +10,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from jappl_time_log.models.time_log_model import TimeLog
 from jappl_time_log.models.user_detail_model import UserDetail
 from jappl_time_log.serializers.timelog.timelog_read_serializer import TimeLogReadSerializer
-from jappl_time_log.services.user.user_account_service import UserAccountService
 from jappl_time_log.tests.model_instances.time_log_instance import time_log_instance
 from jappl_time_log.tests.model_instances.user_detail_instance import user_instance
 
@@ -22,9 +20,7 @@ class TestTimeLogListAllView(APITestCase):
     @classmethod
     def setUpTestData(cls):
         """Mock data for timelog list test cases."""
-        raw_password: str = secrets.token_hex(16)
-        hashed_password: str = UserAccountService.hash_password(raw_password)
-        user: UserDetail = user_instance.make(email="test@gmail.com", password=hashed_password)
+        user: UserDetail = user_instance.make(email="test@gmail.com")
         cls.token: str = "Bearer " + str(RefreshToken.for_user(user=user).access_token)
         cls.timelog_1: TimeLog = time_log_instance.make()
         cls.timelog_2: TimeLog = time_log_instance.make()

@@ -11,7 +11,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from jappl_time_log.models.application_model import Application
 from jappl_time_log.models.user_detail_model import UserDetail
 from jappl_time_log.serializers.application.application_serializer import ApplicationSerializer
-from jappl_time_log.services.user.user_account_service import UserAccountService
 from jappl_time_log.tests.model_instances.application_model import application_instance
 from jappl_time_log.tests.model_instances.user_detail_instance import user_instance
 
@@ -22,11 +21,8 @@ class TestApplicationView(APITestCase):
     @classmethod
     def setUpTestData(cls):
         """Mock data for application test cases."""
-        raw_password = secrets.token_hex(16)
-        hashed_password = UserAccountService.hash_password(raw_password)
-        user: UserDetail = user_instance.make(email="test@gmail.com", password=hashed_password)
+        user: UserDetail = user_instance.make(email="test@gmail.com")
         cls.user: UserDetail = user
-        cls.raw_password: str = raw_password
         cls.token: str = "Bearer " + str(RefreshToken.for_user(user=user).access_token)
         cls.application: Application = application_instance.make()
         cls.new_application_name: str = secrets.token_hex(16)
