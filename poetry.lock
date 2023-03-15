@@ -1,35 +1,4 @@
 [[package]]
-name = "argon2-cffi"
-version = "21.3.0"
-description = "The secure Argon2 password hashing algorithm."
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-argon2-cffi-bindings = "*"
-
-[package.extras]
-dev = ["pre-commit", "cogapp", "tomli", "coverage[toml] (>=5.0.2)", "hypothesis", "pytest", "sphinx", "sphinx-notfound-page", "furo"]
-docs = ["sphinx", "sphinx-notfound-page", "furo"]
-tests = ["coverage[toml] (>=5.0.2)", "hypothesis", "pytest"]
-
-[[package]]
-name = "argon2-cffi-bindings"
-version = "21.2.0"
-description = "Low-level CFFI bindings for Argon2"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-cffi = ">=1.0.1"
-
-[package.extras]
-dev = ["pytest", "cogapp", "pre-commit", "wheel"]
-tests = ["pytest"]
-
-[[package]]
 name = "asgiref"
 version = "3.6.0"
 description = "ASGI specs, helper code, and adapters"
@@ -78,17 +47,6 @@ colorama = ["colorama (>=0.4.3)"]
 d = ["aiohttp (>=3.7.4)"]
 jupyter = ["ipython (>=7.8.0)", "tokenize-rt (>=3.2.0)"]
 uvloop = ["uvloop (>=0.15.2)"]
-
-[[package]]
-name = "cffi"
-version = "1.15.1"
-description = "Foreign Function Interface for Python calling C code."
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-pycparser = "*"
 
 [[package]]
 name = "cfgv"
@@ -202,18 +160,6 @@ description = "Camel case JSON support for Django REST framework."
 category = "main"
 optional = false
 python-versions = ">=3.5"
-
-[[package]]
-name = "djangorestframework-dataclasses"
-version = "1.2.0"
-description = "A dataclasses serializer for Django REST Framework"
-category = "main"
-optional = false
-python-versions = ">=3.7"
-
-[package.dependencies]
-django = ">=2.0"
-djangorestframework = ">=3.9"
 
 [[package]]
 name = "djangorestframework-simplejwt"
@@ -503,14 +449,6 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
-name = "pycparser"
-version = "2.21"
-description = "C parser in Python"
-category = "main"
-optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-
-[[package]]
 name = "pyflakes"
 version = "2.5.0"
 description = "passive checker of Python programs"
@@ -678,15 +616,12 @@ test = ["covdefaults (>=2.2.2)", "coverage-enable-subprocess (>=1)", "coverage (
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "8ceec53d401e3e8b3c1f1a8643dc9a6cb5d493491b7a5213a02b3044b69f8598"
+content-hash = "3410d1ae2415babc893b3cc108f816685e9117dc05dafaeee40893b7b17cb9e6"
 
 [metadata.files]
-argon2-cffi = []
-argon2-cffi-bindings = []
 asgiref = []
 attrs = []
 black = []
-cffi = []
 cfgv = []
 click = [
     {file = "click-8.1.3-py3-none-any.whl", hash = "sha256:bb4d8133cb15a609f44e8213d9b391b0809795062913b383c62be0ee95b1db48"},
@@ -703,7 +638,6 @@ django = []
 django-filter = []
 djangorestframework = []
 djangorestframework-camel-case = []
-djangorestframework-dataclasses = []
 djangorestframework-simplejwt = []
 drf-spectacular = []
 eradicate = []
@@ -738,10 +672,6 @@ pluggy = [
 pre-commit = []
 psycopg2-binary = []
 pycodestyle = []
-pycparser = [
-    {file = "pycparser-2.21-py2.py3-none-any.whl", hash = "sha256:8ee45429555515e1f6b185e78100aea234072576aa43ab53aefcae078162fca9"},
-    {file = "pycparser-2.21.tar.gz", hash = "sha256:e644fdec12f7872f86c58ff790da456218b10f863970249516d60a5eaca77206"},
-]
 pyflakes = []
 pyjwt = []
 pyrsistent = []
