@@ -15,7 +15,7 @@ from jappl_time_log.serializers.timelog.timelog_input_serializer import TimeLogS
 
 
 class TimeLogView(ModelViewSet):
-    """API for CRUD Ops for Project."""
+    """API for CRUD Ops for TimeLog."""
 
     queryset = TimeLog.objects.all()
     serializer_class = TimeLogSerializer
