@@ -18,7 +18,7 @@ class TestUserListView(APITestCase):
     @classmethod
     def setUpTestData(cls):
         """Mock data for listing user test cases."""
-        user: UserDetail = user_instance.make(email="test2@gmail.com")
+        user: UserDetail = user_instance.make()
         cls.token: str = "Bearer " + str(RefreshToken.for_user(user=user).access_token)
         cls.user_1: UserDetail = user
         cls.user_2: UserDetail = user_instance.make()
