@@ -76,13 +76,12 @@ REST_FRAMEWORK = {
         # Any other renders
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-    "DEFAULT_PARSER_CLASSES": (
-        # If you use MultiPartFormParser or FormParser, we also have a camel case version
+    "DEFAULT_PARSER_CLASSES": [
         "djangorestframework_camel_case.parser.CamelCaseFormParser",
         "djangorestframework_camel_case.parser.CamelCaseMultiPartParser",
         "djangorestframework_camel_case.parser.CamelCaseJSONParser",
-        # Any other parsers
-    ),
+    ],
+    "DEFAULT_PERMISSION_CLASSES": ["jappl_time_log.permissions.is_employee_permission.IsEmployeePermission"],
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'jappl_staffclocker_backend.middlewares.jwt_authentication_middleware.JWTTokenAuthentication'

@@ -5,7 +5,6 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from jappl_time_log.models.user_detail_model import UserDetail
-from jappl_time_log.permissions.is_employee_permission import IsEmployeePermission
 from jappl_time_log.serializers.user.user_edit_serializer import UserEditSerializer
 
 
@@ -15,7 +14,6 @@ class UserEditView(UpdateAPIView):
     queryset = UserDetail.objects.all()
     lookup_field = "user_id"
     serializer_class = UserEditSerializer
-    permission_classes = [IsEmployeePermission]
 
     @transaction.atomic
     def update(self, request: Request, *args, **kwargs) -> Response:

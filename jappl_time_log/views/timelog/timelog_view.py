@@ -10,7 +10,6 @@ from rest_framework.viewsets import ModelViewSet
 
 from jappl_time_log.models.time_log_model import TimeLog
 from jappl_time_log.models.user_detail_model import UserDetail
-from jappl_time_log.permissions.is_employee_permission import IsEmployeePermission
 from jappl_time_log.serializers.timelog.timelog_input_serializer import TimeLogSerializer
 
 
@@ -19,7 +18,6 @@ class TimeLogView(ModelViewSet):
 
     queryset = TimeLog.objects.all()
     serializer_class = TimeLogSerializer
-    permission_classes = [IsEmployeePermission]
 
     @transaction.atomic
     def list(self, request: Request) -> Response:
