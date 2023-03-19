@@ -28,16 +28,17 @@ class JWTTokenSchema(OpenApiAuthenticationExtension):
         }
 
 
+def get_first_and_last_name(name: str) -> Tuple[str, str]:
+    """Get first name and last name from firebase token payload."""
+    first_name, last_name = name.split(" ", 1)
+    return first_name, last_name
+
+
 class JWTTokenAuthentication(BaseAuthentication):
     """Custom middleware for authenticate using jwt.
 
     Change look up model to default auth user to user detail model in another application
     """
-
-    def get_first_and_last_name(self, name: str) -> Tuple[str, str]:
-        """Get first name and last name from firebase token payload."""
-        first_name, last_name = name.split(" ", 1)
-        return first_name, last_name
 
     def authenticate(self, request: Request) -> Union[Tuple[Union[UserDetail, None], None], None]:
         """Authenticate firebase token and insert new user if does not exist."""
@@ -52,12 +53,11 @@ class JWTTokenAuthentication(BaseAuthentication):
         except jwt.DecodeError:
             raise InvalidToken("Invalid auth token")
         token_payload: FirebasePayLoadDataclass = FirebasePayloadSerializer(decoded_token).data
-        first_name, last_name = self.get_first_and_last_name(token_payload.get('name'))
+        first_name, last_name = get_first_and_last_name(token_payload.get('name'))
         try:
             user: UserDetail = UserDetail.objects.get(email__exact=token_payload.get("email"))
         except UserDetail.DoesNotExist:
             user: UserDetail = UserDetail.objects.create(
                 email=token_payload.get("email"), first_name=first_name, last_name=last_name
             )
-        print(user)
         return user, None
