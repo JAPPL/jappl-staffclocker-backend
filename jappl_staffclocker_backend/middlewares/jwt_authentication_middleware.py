@@ -1,11 +1,15 @@
-from typing import Dict
+from typing import Dict, Tuple, Union
 
+import jwt
 from drf_spectacular.extensions import OpenApiAuthenticationExtension
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework_simplejwt.exceptions import InvalidToken
-from rest_framework_simplejwt.settings import api_settings
-from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework.authentication import BaseAuthentication
+from rest_framework.request import Request
 
+from jappl_staffclocker_backend.exceptions.invalid_token import InvalidToken
+from jappl_staffclocker_backend.serializer.firebase_payload_serializer import (
+    FirebasePayLoadDataclass,
+    FirebasePayloadSerializer,
+)
 from jappl_time_log.models.user_detail_model import UserDetail
 
 
@@ -24,20 +28,36 @@ class JWTTokenSchema(OpenApiAuthenticationExtension):
         }
 
 
-class JWTTokenAuthentication(JWTAuthentication):
+class JWTTokenAuthentication(BaseAuthentication):
     """Custom middleware for authenticate using jwt.
 
     Change look up model to default auth user to user detail model in another application
     """
 
-    def get_user(self, validated_token: AccessToken) -> UserDetail:
-        """Find and return a user using the given validated token."""
-        try:
-            user_id: int = validated_token[api_settings.USER_ID_CLAIM]
-            user: UserDetail = UserDetail.objects.get(user_id=user_id)
-        except KeyError:
-            raise InvalidToken(detail="Token contained no recognizable user identification")
-        except UserDetail.DoesNotExist:
-            raise InvalidToken(detail="User not found", code="user_not_found")
+    def get_first_and_last_name(self, name: str) -> Tuple[str, str]:
+        """Get first name and last name from firebase token payload."""
+        first_name, last_name = name.split(" ", 1)
+        return first_name, last_name
 
-        return user
+    def authenticate(self, request: Request) -> Union[Tuple[Union[UserDetail, None], None], None]:
+        """Authenticate firebase token and insert new user if does not exist."""
+        authentication_header: str = request.headers.get("Authorization")
+        if not authentication_header:
+            return None
+        _, firebase_token = authentication_header.split(' ', 1)
+        if not firebase_token:
+            return None
+        try:
+            decoded_token: Dict[str, str] = jwt.decode(firebase_token, options={"verify_signature": False})
+        except jwt.DecodeError:
+            raise InvalidToken("Invalid auth token")
+        token_payload: FirebasePayLoadDataclass = FirebasePayloadSerializer(decoded_token).data
+        first_name, last_name = self.get_first_and_last_name(token_payload.get('name'))
+        try:
+            user: UserDetail = UserDetail.objects.get(email__exact=token_payload.get("email"))
+        except UserDetail.DoesNotExist:
+            user: UserDetail = UserDetail.objects.create(
+                email=token_payload.get("email"), first_name=first_name, last_name=last_name
+            )
+        print(user)
+        return user, None

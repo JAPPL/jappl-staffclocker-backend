@@ -8,6 +8,7 @@ omit =
   manage.py,
   */serializers/*,
   */commands/*,
+  */middlewares/*,
   */asgi.py
 relative_files = True
 

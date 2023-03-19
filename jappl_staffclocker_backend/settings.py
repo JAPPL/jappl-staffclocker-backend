@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 import os
-from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -49,7 +48,7 @@ DEFAULT_APPS = [
     'django.contrib.staticfiles',
 ]
 
-THIRD_PARTY_APPS = ["rest_framework", "rest_framework_simplejwt", "drf_spectacular", 'django_filters']
+THIRD_PARTY_APPS = ["rest_framework", "drf_spectacular", 'django_filters']
 
 LOCAL_APPS = ['jappl_time_log']
 
@@ -86,13 +85,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'jappl_staffclocker_backend.middlewares.jwt_authentication_middleware.JWTTokenAuthentication'
     ],
-}
-
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(hours=2),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    "USER_ID_CLAIM": "user_id",
-    "USER_ID_FIELD": "user_id",
 }
 
 ROOT_URLCONF = "jappl_staffclocker_backend.urls"
