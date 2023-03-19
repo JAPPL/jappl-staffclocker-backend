@@ -9,4 +9,3 @@ class ProjectView(ModelViewSet):
 
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    # permission_classes = [IsEmployeePermission]
