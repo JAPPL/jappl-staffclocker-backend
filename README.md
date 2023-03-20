@@ -1,3 +1,7 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=JAPPL_jappl-staffclocker-backend&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=JAPPL_jappl-staffclocker-backend)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=JAPPL_jappl-staffclocker-backend&metric=coverage)](https://sonarcloud.io/summary/new_code?id=JAPPL_jappl-staffclocker-backend)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=JAPPL_jappl-staffclocker-backend&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=JAPPL_jappl-staffclocker-backend)
+
 ## JAPPL StaffClocker Application
 
 ### Project structure
