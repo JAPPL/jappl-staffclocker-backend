@@ -48,7 +48,7 @@ DEFAULT_APPS = [
     'django.contrib.staticfiles',
 ]
 
-THIRD_PARTY_APPS = ["rest_framework", "drf_spectacular", 'django_filters']
+THIRD_PARTY_APPS = ["rest_framework", "drf_spectacular", 'django_filters', 'django_extensions']
 
 LOCAL_APPS = ['jappl_time_log']
 
@@ -169,4 +169,9 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'Mini HR service for project based company.',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
+}
+
+GRAPH_MODELS = {
+    'all_applications': True,
+    'group_models': True,
 }
