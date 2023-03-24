@@ -12,5 +12,35 @@ services:
       - POSTGRES_USER=jappl_admin
     ports:
       - "5432:5432"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "jappl_time_log", "-U", "jappl_admin" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
     volumes:
       - ./dbvolume:/var/lib/postgresql/data
+    networks:
+      - p1-network
+
+  jappl-backend:
+    image: staffclocker-backend
+    platform: linux/amd64
+    container_name: staffclocker-backend
+    build:
+      context: ./
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_DEBUG=False
+      - DJANGO_DB_NAME=jappl_time_log
+      - DJANGO_DB_USER=jappl_admin
+      - DJANGO_DB_PASSWORD=qwertyasdfgh
+      - DJANGO_DB_HOST=vending-machine-postgres
+    depends_on:
+      vending-machine-postgres:
+        condition: service_healthy
+    networks:
+      - p1-network
+
+networks:
+  p1-network:
