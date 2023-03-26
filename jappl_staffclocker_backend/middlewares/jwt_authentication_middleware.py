@@ -45,13 +45,15 @@ class JWTTokenAuthentication(BaseAuthentication):
         authentication_header: str = request.headers.get("Authorization")
         if not authentication_header:
             return None
-        _, firebase_token = authentication_header.split(' ', 1)
-        if not firebase_token:
-            return None
         try:
+            _, firebase_token = authentication_header.split(' ', 1)
+            if not firebase_token:
+                return None
             decoded_token: Dict[str, str] = jwt.decode(firebase_token, options={"verify_signature": False})
         except jwt.DecodeError:
             raise InvalidToken("Invalid auth token")
+        except ValueError:
+            raise InvalidToken("No token given or token is in wrong format")
         token_payload: FirebasePayLoadDataclass = FirebasePayloadSerializer(decoded_token).data
         first_name, last_name = get_first_and_last_name(token_payload.get('name'))
         try:
