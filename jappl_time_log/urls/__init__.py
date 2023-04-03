@@ -23,7 +23,7 @@ from jappl_time_log.urls.user_url import user_url
 
 base_user_url = "user"
 base_application_url = "application"
-base_project_member_url = "project_member"
+base_project_member_url = "project-member"
 base_project_url = "project"
 base_timelog_url = "timelog"
 

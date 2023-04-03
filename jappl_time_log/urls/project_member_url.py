@@ -9,7 +9,7 @@ project_member_url = [
     path("delete/<int:project_member_id>", ProjectMemberViewSet.as_view({'delete': 'destroy'}), name="delete"),
     path(
         "update/<int:project_member_id>",
-        ProjectMemberViewSet.as_view({'patch': 'partial_update', 'put': 'update'}),
+        ProjectMemberViewSet.as_view({'put': 'update'}),
         name="update",
     ),
 ]

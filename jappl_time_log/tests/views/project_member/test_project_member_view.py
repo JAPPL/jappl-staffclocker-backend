@@ -9,6 +9,7 @@ from rest_framework.test import APITestCase
 from jappl_time_log.models.project_member_model import ProjectMember
 from jappl_time_log.models.project_model import Project
 from jappl_time_log.models.user_detail_model import UserDetail
+from jappl_time_log.serializers.project_member.project_member_read_serializer import ProjectMemberReadSerializer
 from jappl_time_log.serializers.project_member.project_member_serializer import ProjectMemberSerializer
 from jappl_time_log.tests.model_instances.project_instance import project_instance
 from jappl_time_log.tests.model_instances.project_member_instance import project_member_instance
@@ -30,6 +31,8 @@ class TestProjectMemberView(APITestCase):
         cls.employee_1: UserDetail = employee_1
         cls.employee_2: UserDetail = user_instance.make()
         cls.project_member: ProjectMember = project_member_instance.make(project=project_1, user=employee_1)
+        cls.project_member_2: ProjectMember = project_member_instance.make()
+        cls.project_member_3: ProjectMember = project_member_instance.make()
 
     def setUp(self) -> None:
         """Authenticate user for passing through API permission guard."""
@@ -39,7 +42,11 @@ class TestProjectMemberView(APITestCase):
         """Method to test listing project members."""
         url: str = reverse("project_member:list")
         response: Response = self.client.get(url)
-        expected_result: List[ProjectMember] = [ProjectMemberSerializer(self.project_member).data]
+        expected_result: List[ProjectMember] = [
+            ProjectMemberReadSerializer(self.project_member).data,
+            ProjectMemberReadSerializer(self.project_member_2).data,
+            ProjectMemberReadSerializer(self.project_member_3).data,
+        ]
         response_data: List[ProjectMember] = json.loads(json.dumps(response.data))
         self.assertEqual(expected_result, response_data)
 
@@ -50,7 +57,7 @@ class TestProjectMemberView(APITestCase):
             kwargs={"project_member_id": self.project_member.project_member_id},
         )
         response: Response = self.client.get(url)
-        expected_result: ProjectMember = ProjectMemberSerializer(self.project_member).data
+        expected_result: ProjectMember = ProjectMemberReadSerializer(self.project_member).data
         response_data: ProjectMember = json.loads(json.dumps(response.data))
         self.assertEqual(expected_result, response_data)
 
@@ -71,9 +78,13 @@ class TestProjectMemberView(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_add_project_member_invalid_input(self):
-        """Method to test adding proeject_member with incorrect input."""
+        """Method to test adding project_member with incorrect input, including duplicate."""
         url: str = reverse("project_member:add")
         response: Response = self.client.post(url)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        request_body: Dict[str, str] = {"project": self.project_1.project_id, "user": self.employee_1.user_id}
+        response: Response = self.client.post(url, data=request_body)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_edit_project_member_valid_input(self):
@@ -92,9 +103,16 @@ class TestProjectMemberView(APITestCase):
         response: Response = self.client.put(url)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+        request_body: Dict[str, str] = {
+            "project": self.project_member_2.project.project_id,
+            "user": self.project_member_2.user.user_id,
+        }
+        response: Response = self.client.put(url, data=request_body)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_edit_project_member_not_found(self):
         """Method to test editing non-existing project member."""
-        url: str = reverse(self.update_url, kwargs={"project_member_id": self.project_member.project_member_id + 1})
+        url: str = reverse(self.update_url, kwargs={"project_member_id": self.project_member_3.project_member_id + 1})
         response: Response = self.client.put(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -111,7 +129,7 @@ class TestProjectMemberView(APITestCase):
         """Method to test deleting non-existing project member."""
         url = reverse(
             "project_member:delete",
-            kwargs={"project_member_id": self.project_member.project_member_id + 1},
+            kwargs={"project_member_id": self.project_member_3.project_member_id + 1},
         )
         response: Response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

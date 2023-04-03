@@ -39,7 +39,7 @@ class TestRegisterView(APITestCase):
     def test_create_project(self) -> None:
         """Method to test create project."""
         url: str = reverse("project:project_create")
-        project_name: str = "Test_Project_2"
+        project_name: str = "Test_Project_4"
         request_body: Dict[str, str] = {"project_name": project_name}
         response: Response = self.client.post(url, data=request_body)
 
