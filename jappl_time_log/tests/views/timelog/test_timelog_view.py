@@ -61,7 +61,12 @@ class TestTimeLogView(APITestCase):
     def test_create_timelog(self) -> None:
         """Method to test create timelog."""
         url: str = reverse(self.route["create"])
-        data: Dict[str, any] = {"hour_spent": 2, "message": "test_msg", "project_id": self.project.project_id}
+        data: Dict[str, any] = {
+            "hour_spent": 2,
+            "message": "test_msg",
+            "project_id": self.project.project_id,
+            "timestamp": "2022-04-10",
+        }
         response: Response = self.client.post(url, data=data)
         self.client.force_authenticate(user=self.user_2)
         response_2: Response = self.client.post(url, data=data)
@@ -102,7 +107,12 @@ class TestTimeLogView(APITestCase):
     def test_put_timelog(self) -> None:
         """Method to test put timelog."""
         url: str = reverse(self.route["update"], args=[self.timelog.id])
-        data: Dict[str, str] = {"hour_spent": 4, "message": "test2_message", "project_id": self.project.project_id}
+        data: Dict[str, str] = {
+            "hour_spent": 4,
+            "message": "test2_message",
+            "project_id": self.project.project_id,
+            "timestamp": "2022-04-08",
+        }
         response: Response = self.client.put(url, data=data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["hour_spent"], 4)
