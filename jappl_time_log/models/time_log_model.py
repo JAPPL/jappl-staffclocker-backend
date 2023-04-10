@@ -9,7 +9,7 @@ class TimeLog(models.Model):
     user_id = models.ForeignKey(to="jappl_time_log.UserDetail", null=False, on_delete=models.CASCADE)
     hour_spent = models.PositiveIntegerField(null=False, validators=[MaxValueValidator(8)])
     message = models.CharField(max_length=100, null=False)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField()
     project_id = models.ForeignKey(to="jappl_time_log.Project", null=False, on_delete=models.CASCADE)
     approved = models.BooleanField(default=False)
     paid = models.BooleanField(default=False)
