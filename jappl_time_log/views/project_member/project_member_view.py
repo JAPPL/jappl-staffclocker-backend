@@ -1,7 +1,9 @@
 from typing import Union
 
 from django.db.utils import IntegrityError
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -24,6 +26,10 @@ class ProjectMemberViewSet(ModelViewSet):
     }
     lookup_field = "project_member_id"
     duplication_response_body = "User already in this project."
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['project', 'user']
+    search_fields = ['project__project_name', 'user__first_name', 'user__last_name', 'user__email']
+    ordering_fields = ['application', 'user']
 
     def get_serializer_class(
         self,
