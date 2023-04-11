@@ -11,6 +11,7 @@ from rest_framework.viewsets import ModelViewSet
 from jappl_time_log.models.time_log_model import TimeLog
 from jappl_time_log.models.user_detail_model import UserDetail
 from jappl_time_log.serializers.timelog.timelog_input_serializer import TimeLogSerializer
+from jappl_time_log.serializers.timelog.timelog_read_serializer import TimeLogReadSerializer
 
 
 class TimeLogView(ModelViewSet):
@@ -24,7 +25,7 @@ class TimeLogView(ModelViewSet):
         """Process GET timelog method for user."""
         user: UserDetail = request.user
         queryset = TimeLog.objects.filter(user_id=user.user_id)
-        serializer = TimeLogSerializer(queryset, many=True)
+        serializer = TimeLogReadSerializer(queryset, many=True)
         return Response(serializer.data)
 
     @transaction.atomic
