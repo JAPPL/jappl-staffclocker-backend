@@ -1,4 +1,5 @@
-from typing import Dict
+import json
+from typing import Dict, List
 
 from django.urls import reverse
 from rest_framework import status
@@ -8,6 +9,7 @@ from rest_framework.test import APITestCase
 from jappl_time_log.models.project_model import Project
 from jappl_time_log.models.time_log_model import TimeLog
 from jappl_time_log.models.user_detail_model import UserDetail
+from jappl_time_log.serializers.timelog.timelog_read_serializer import TimeLogReadSerializer
 from jappl_time_log.tests.model_instances.project_instance import project_instance
 from jappl_time_log.tests.model_instances.time_log_instance import time_log_instance
 from jappl_time_log.tests.model_instances.user_detail_instance import user_instance
@@ -50,13 +52,18 @@ class TestTimeLogView(APITestCase):
         self.client.force_authenticate(user=self.user_2)
         response_2: Response = self.client.get(url)
 
+        expected_result_1: List[TimeLog] = [
+            TimeLogReadSerializer(self.timelog).data,
+        ]
+        response_data_1: List[TimeLog] = json.loads(json.dumps(response.data))
+        expected_result_2: List[TimeLog] = [
+            TimeLogReadSerializer(self.timelog_2).data,
+        ]
+        response_data_2: List[TimeLog] = json.loads(json.dumps(response_2.data))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]["user_id"], self.user.user_id)
-
+        self.assertEqual(expected_result_1, response_data_1)
         self.assertEqual(response_2.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response_2.data), 1)
-        self.assertEqual(response_2.data[0]["user_id"], self.user_2.user_id)
+        self.assertEqual(expected_result_2, response_data_2)
 
     def test_create_timelog(self) -> None:
         """Method to test create timelog."""
