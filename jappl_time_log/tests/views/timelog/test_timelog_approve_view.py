@@ -36,19 +36,19 @@ class TestTimeLogApproveView(APITestCase):
         """Authenticate user for passing through API permission guard."""
         self.client.force_authenticate(user=self.user)
 
-    def test_approve_timelog_with_permission(self):
+    def test_approve_timelog(self):
         """Method to test approving timelog."""
         url: str = reverse(self.url, args=[self.timelog_1.id])
         response: Response = self.client.patch(url)
         response_data: TimeLog = json.loads(json.dumps(response.data))
         self.assertEqual(True, response_data['approved'])
 
-    def test_approve_timelog_with_no_permission(self) -> None:
+    def test_approve_timelog_other_users(self) -> None:
         """Method to test approving timelog of different user ."""
         url: str = reverse(self.url, args=[self.timelog_2.id])
         response: Response = self.client.patch(url)
-
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        response_data: TimeLog = json.loads(json.dumps(response.data))
+        self.assertEqual(True, response_data['approved'])
 
     def test_approve_timelog_no_input(self) -> None:
         """Method to test approving timelog that has no input."""

@@ -35,13 +35,16 @@ class TestTimeLogMarkAsPaidView(APITestCase):
         cls.timelog_2: TimeLog = time_log_instance.make(
             user_id=user_2, hour_spent=2, message="test", project_id=project_1
         )
+        cls.approved_timelog_2: TimeLog = time_log_instance.make(
+            user_id=user_2, hour_spent=2, message="test approved", project_id=project_1, approved=True
+        )
         cls.url: str = "timelog:timelog_mark_as_paid"
 
     def setUp(self) -> None:
         """Authenticate user for passing through API permission guard."""
         self.client.force_authenticate(user=self.user_1)
 
-    def test_mark_as_paid_approved_timelog_with_permission(self):
+    def test_mark_as_paid_approved_timelog(self):
         """Method to test marking approved timelog as paid."""
         url: str = reverse(self.url, args=[self.approved_timelog_1.id])
         response: Response = self.client.patch(url)
@@ -54,11 +57,12 @@ class TestTimeLogMarkAsPaidView(APITestCase):
         response: Response = self.client.patch(url)
         self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
 
-    def test_mark_timelog_with_no_permission(self) -> None:
+    def test_mark_timelog_with_other_users(self) -> None:
         """Method to test marking other users' timelog."""
-        url: str = reverse(self.url, args=[self.timelog_2.id])
+        url: str = reverse(self.url, args=[self.approved_timelog_2.id])
         response: Response = self.client.patch(url)
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        response_data: TimeLog = json.loads(json.dumps(response.data))
+        self.assertEqual(True, response_data['paid'])
 
     def test_mark_timelog_no_input(self) -> None:
         """Method to test marking approved timelog as paid without input."""
